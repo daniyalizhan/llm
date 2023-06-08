@@ -1,20 +1,17 @@
-import os
-
 import streamlit as st
-from streamlit import set_page_config
-from langchain.llm import OpenAI
+from langchain import OpenAI
 
+st.title('🦜🔗 Langchain Quickstart App')
 
+with st.sidebar:
+  openai_api_key = st.text_input('OpenAI API Key')
 
-#os.environ['OPENAI_API_key']=apikey
-st.title('Lesson Plan gpt creator')
+def generate_response(input_text):
+  llm = OpenAI(temperature=0.7, openai_api_key=openai_api_key)
+  st.info(llm(input_text))
 
-prompt= st.text_input('Enter the grade')
-
-prompt= st.text_input('Enter the course/ subject')
-prompt= st.text_input('specific board if any')
-
-llm= OpenAI(temperature=0.9)
-if prompt:
-  response=llm(prompt)
-  st.write(response)
+with st.form('my_form'):
+  text = st.text_area('Enter text:', 'What are 3 key advice for learning how to code?')
+  submitted = st.form_submit_button('Submit')
+  if submitted:
+    generate_response(text)
